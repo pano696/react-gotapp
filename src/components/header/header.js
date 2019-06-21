@@ -25,25 +25,28 @@ const HeaderLinks = styled.ul`
         font-size: 18px;
     }
 `;
+const Li = styled.li``;
+const A = styled.a``;
+
 
 const Header = () => {
     return (
         <HeaderBlock>
             <HeaderTitle>
-                <a href="#">
+                <A href="#">
                 Game of Thrones DB
-                </a>
+                </A>
             </HeaderTitle>
             <HeaderLinks>
-                <li>
-                    <a href="#">Characters</a>
-                </li>
-                <li>
-                    <a href="#">Houses</a>
-                </li>
-                <li>
-                    <a href="#">Books</a>   
-                </li>
+                <Li>
+                    <A href="#">Characters</A>
+                </Li>
+                <Li>
+                    <A href="#">Houses</A>
+                </Li>
+                <Li>
+                    <A href="#">Books</A>
+                </Li>
             </HeaderLinks>
         </HeaderBlock>
     );
