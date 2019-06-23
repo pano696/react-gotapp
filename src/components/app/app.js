@@ -5,12 +5,14 @@ import RandomChar from '../randomChar';
 import ItemList from '../itemList';
 import CharDetails from '../charDetails';
 import GotService from '../../services/GotService';
-import { longStackSupport } from 'q';
+import styled from 'styled-components';
 
 
 const App = () => {
 
   const [showRandomChar, toggleRandomChar] = useState(true);
+  const [selectedChar, toggleSelectedChar] = useState(null);
+
 
   const got = new GotService();
 
@@ -31,6 +33,10 @@ const App = () => {
     toggleRandomChar(!showRandomChar)
   }
 
+  const onCharSelected = (id) => {
+    toggleSelectedChar(id)
+  }
+
     return (
         <>
             <Container>
@@ -39,16 +45,16 @@ const App = () => {
             <Container>
                 <Row>
                     <Col lg={{size: 5, offset: 0}}>
-                        <button onClick={toggleRandom}>{showRandomChar ? 'Скрыть случайного героя' : 'Показать случайного героя'}</button>
+                        <Btn onClick={toggleRandom}>{showRandomChar ? 'Скрыть случайного героя' : 'Показать случайного героя'}</Btn>
                         {showRandomChar ? <RandomChar/> : null}
                     </Col>
                 </Row>
                 <Row>
                     <Col md='6'>
-                        <ItemList />
+                        <ItemList onCharSelected={onCharSelected}/>
                     </Col>
                     <Col md='6'>
-                        <CharDetails />
+                        <CharDetails charId={selectedChar}/>
                     </Col>
                 </Row>
             </Container>
@@ -57,3 +63,13 @@ const App = () => {
 };
 
 export default App;
+
+const Btn = styled.button`
+  margin: 1rem auto;
+  text-align: center;
+  padding: 5px;
+  display: block;
+  background: #2522c7;
+  color: #ffffff;
+  border: none;
+`;

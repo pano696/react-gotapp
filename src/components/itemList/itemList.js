@@ -1,23 +1,49 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
+import GotService from '../../services/GotService';
+import Spiner from '../spiner';
 // import './itemList.css';
 export default class ItemList extends Component {
 
-    render() {
-        return (
-            <ListGroup>
-                <ListGroupItem>
-                    John Snow
-                </ListGroupItem>
-                <ListGroupItem>
-                    Brandon Stark
-                </ListGroupItem>
-                <ListGroupItem>
-                    Geremy
-                </ListGroupItem>
-            </ListGroup>
-        );
+  state = {
+    charList: null
+  }
+
+  gotService = new GotService();
+
+  componentDidMount() {
+    this.gotService.getAllCharacters()
+        .then((charList) => this.setState({charList}))
+  }
+
+  renderItems(arr) {
+    return arr.map((item, i) => {
+      return (
+        <ListGroupItem
+          key={i}
+          onClick={() => this.props.onCharSelected(41 + i)}>
+            {item.name}
+        </ListGroupItem>
+      )
+    })
+  }
+
+  render() {
+
+    const {charList} = this.state;
+
+    if (!charList) {
+      return <Spiner />
     }
+
+    const items = this.renderItems(charList);
+
+    return (
+      <ListGroup>
+        {items}
+      </ListGroup>
+    );
+  }
 }
 
 const ListGroupItem = styled.li`

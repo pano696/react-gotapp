@@ -1,33 +1,67 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
+import GotService from '../../services/GotService';
 // import './charDetails.css';
 export default class CharDetails extends Component {
 
-    render() {
-        return (
-            <CharDetailsBlock>
-                <H4>John Snow</H4>
-                <Ul>
-                    <ListItemGroup>
-                        <Term>Gender</Term>
-                        <Span>male</Span>
-                    </ListItemGroup>
-                    <ListItemGroup>
-                        <Term>Born</Term>
-                        <Span>1783</Span>
-                    </ListItemGroup>
-                    <ListItemGroup>
-                        <Term>Died</Term>
-                        <Span>1820</Span>
-                    </ListItemGroup>
-                    <ListItemGroup>
-                        <Term>Culture</Term>
-                        <Span>First</Span>
-                    </ListItemGroup>
-                </Ul>
-            </CharDetailsBlock>
-        );
+  state = {
+    char: null
+  }
+
+  gotService = new GotService();
+
+  componentDidMount() {
+    this.updateChar();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.charId !== prevProps.charId) {
+      this.updateChar();
     }
+  }
+
+  updateChar() {
+    const {charId} = this.props;
+    console.log(charId);
+
+    if (!charId) {return;}
+
+    this.gotService.getCharacter(charId)
+        .then((char) => this.setState({char}));
+  }
+
+  render() {
+
+    if (!this.state.char) {
+      return <span className="select-error">Please select a character</span>
+    }
+
+    const {name, gender, born, died, culture} = this.state.char;
+
+    return (
+        <CharDetailsBlock>
+            <H4>{name}</H4>
+            <Ul>
+                <ListItemGroup>
+                    <Term>Gender</Term>
+                    <Span>{gender}</Span>
+                </ListItemGroup>
+                <ListItemGroup>
+                    <Term>Born</Term>
+                    <Span>{born}</Span>
+                </ListItemGroup>
+                <ListItemGroup>
+                    <Term>Died</Term>
+                    <Span>{died}</Span>
+                </ListItemGroup>
+                <ListItemGroup>
+                    <Term>Culture</Term>
+                    <Span>{culture}</Span>
+                </ListItemGroup>
+            </Ul>
+        </CharDetailsBlock>
+    );
+  }
 }
 
 const CharDetailsBlock = styled.div`
