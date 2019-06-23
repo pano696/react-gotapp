@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Col, Row, Container} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
 import ItemList from '../itemList';
 import CharDetails from '../charDetails';
 import GotService from '../../services/GotService';
+import { longStackSupport } from 'q';
 
 
 const App = () => {
+
+  const [showRandomChar, toggleRandomChar] = useState(true);
 
   const got = new GotService();
 
@@ -24,6 +27,9 @@ const App = () => {
   got.getHouse(6)
     .then(res => console.log('Hous 6:', res));
 
+  const toggleRandom = () => {
+    toggleRandomChar(!showRandomChar)
+  }
 
     return (
         <>
@@ -33,7 +39,8 @@ const App = () => {
             <Container>
                 <Row>
                     <Col lg={{size: 5, offset: 0}}>
-                        <RandomChar/>
+                        <button onClick={toggleRandom}>{showRandomChar ? 'Скрыть случайного героя' : 'Показать случайного героя'}</button>
+                        {showRandomChar ? <RandomChar/> : null}
                     </Col>
                 </Row>
                 <Row>

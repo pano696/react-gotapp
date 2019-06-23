@@ -1,35 +1,84 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-import './randomChar.css';
+import GotSevices from '../../services/GotService';
+import Spiner from '../spiner'
+import ErrorMessage from '../errorMessage';
+// import './randomChar.css';
 
 export default class RandomChar extends Component {
 
-    render() {
+  constructor() {
+    super();
+    this.updateCharacter();
+  }
 
-        return (
-            <RandomBlock>
-                <H4>Random Character: John</H4>
-                <Ul>
-                    <ListItemGroup>
-                        <Term>Gender </Term>
-                        <Span>male</Span>
-                    </ListItemGroup>
-                    <ListItemGroup>
-                        <Term>Born </Term>
-                        <Span>11.03.1039</Span>
-                    </ListItemGroup>
-                    <ListItemGroup>
-                        <Term>Died </Term>
-                        <Span>13.09.1089</Span>
-                    </ListItemGroup>
-                    <ListItemGroup>
-                        <Term>Culture </Term>
-                        <Span>Anarchy</Span>
-                    </ListItemGroup>
-                </Ul>
-            </RandomBlock>
-        );
-    }
+
+  gotSevices = new GotSevices();
+
+  state = {
+    char: {},
+    loading: true,
+    error: false
+  }
+
+  onCharLoaded = (char) => {
+    this.setState({
+      char,
+      loading: false
+    })
+  }
+
+  onError = (err) => {
+    this.setState({
+      error: true,
+      loading: false
+    })
+  }
+
+  updateCharacter() {
+    const id = Math.floor(Math.random()*140 + 25); //25 - 140
+    this.gotSevices.getCharacter(id)
+        .then(this.onCharLoaded)
+        .catch(this.onError)
+  }
+
+  render() {
+
+    const {char, loading, error} = this.state;
+
+      return (
+          <RandomBlock>
+            {!error ? (loading ? <Spiner/> : <View char={char}/> ) : <ErrorMessage /> }
+          </RandomBlock>
+      );
+  }
+}
+
+const View = ({char}) => {
+  const {name, gender, born, died, culture} = char;
+  return (
+    <>
+      <H4>Random Character: {name}</H4>
+      <Ul>
+        <ListItemGroup>
+          <Term>Gender</Term>
+          <Span>{gender}</Span>
+        </ListItemGroup>
+        <ListItemGroup>
+          <Term>Born</Term>
+          <Span>{born}</Span>
+        </ListItemGroup>
+        <ListItemGroup>
+          <Term>Died</Term>
+          <Span>{died}</Span>
+        </ListItemGroup>
+        <ListItemGroup>
+          <Term>Culture </Term>
+          <Span>{culture}</Span>
+        </ListItemGroup>
+      </Ul>
+    </>
+  )
 }
 
 const RandomBlock = styled.div`
