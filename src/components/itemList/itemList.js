@@ -1,21 +1,19 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-import GotService from '../../services/GotService';
 import Spiner from '../spiner';
 import ErrorMessage from '../errorMessage';
 // import './itemList.css';
 export default class ItemList extends Component {
 
   state = {
-    charList: null,
+    itemList: null,
     error: false
   }
 
-  gotService = new GotService();
-
   componentDidMount() {
-    this.gotService.getAllCharacters()
-        .then((charList) => this.setState({charList}))
+    const {getData} = this.props;
+    getData()
+      .then((itemList) => this.setState({itemList}))
   }
 
   componentDidCatch() {
@@ -23,14 +21,14 @@ export default class ItemList extends Component {
   }
 
   renderItems(arr) {
-    return arr.map((item, i) => {
-      console.log();
-
+    return arr.map((item) => {
+      const {id} = item;
+      const label = this.props.renderItem(item);
       return (
         <ListGroupItem
-          key={item.url.substring(item.url.lastIndexOf('/') + 1)}
-          onClick={() => this.props.onCharSelected(item.url.substring(item.url.lastIndexOf('/') + 1))}>
-            {item.name}
+          key={id}
+          onClick={() => this.props.onItemSelected(id)}>
+            {label}
         </ListGroupItem>
       )
     })
@@ -38,16 +36,16 @@ export default class ItemList extends Component {
 
   render() {
 
-    const {charList, error} = this.state;
+    const {itemList, error} = this.state;
 
-    if (!charList) {
+    if (!itemList) {
       return <Spiner />
     }
     if (error) {
       return <ErrorMessage />
     }
 
-    const items = this.renderItems(charList);
+    const items = this.renderItems(itemList);
 
     return (
       <ListGroup>

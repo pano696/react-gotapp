@@ -4,10 +4,23 @@ import GotService from '../../services/GotService';
 import Spiner from '../spiner';
 import ErrorMessage from '../errorMessage';
 // import './charDetails.css';
-export default class CharDetails extends Component {
+
+const Field = ({item, field, label}) => {
+  return(
+    <ListItemGroup>
+        <Term>{label}</Term>
+        <Span>{item[field]}</Span>
+    </ListItemGroup>
+  )
+}
+
+export {
+  Field
+}
+export default class ItemDetails extends Component {
 
   state = {
-    char: null,
+    item: null,
     loading: false,
     error: false
   }
@@ -15,13 +28,13 @@ export default class CharDetails extends Component {
   gotService = new GotService();
 
   componentDidMount() {
-    this.updateChar();
+    this.updateItem();
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.charId !== prevProps.charId) {
+    if (this.props.itemId !== prevProps.itemId) {
       this.setState({loading: true});
-      this.updateChar();
+      this.updateItem()
     }
   }
 
@@ -29,34 +42,32 @@ export default class CharDetails extends Component {
     this.setState({error: true})
   }
 
-  updateChar() {
-    const {charId} = this.props;
-    if (!charId) {return;}
-    this.gotService.getCharacter(charId)
-        .then((char) => {
-          this.setState({
-            char,
-            loading: false
-          })
-        });
-    // this.foo.bar = 0;
+  updateItem() {
+    const {getData, itemId} = this.props;
+    getData(itemId)
+      .then((item) => this.setState({
+        item,
+        loading: false
+      }))
   }
 
   render() {
 
-    if (!this.state.char) {
+    if (!this.state.item) {
       return (
-        <CharDetailsBlock>Please select a character</CharDetailsBlock>
+        <ItemDetailsBlock>Please select a item</ItemDetailsBlock>
       )
     }
 
-    const {char: {name, gender, born, died, culture}, loading, error} = this.state;
 
-    if (loading) {
+    const {item, error} = this.state
+    const {name} = item;
+
+    if (!item) {
       return  (
-        <CharDetailsBlock>
+        <ItemDetailsBlock>
           <Spiner />
-        </CharDetailsBlock>
+        </ItemDetailsBlock>
       )
     }
 
@@ -67,32 +78,21 @@ export default class CharDetails extends Component {
 
 
     return (
-        <CharDetailsBlock>
+        <ItemDetailsBlock>
             <H4>{name}</H4>
             <Ul>
-                <ListItemGroup>
-                    <Term>Gender</Term>
-                    <Span>{gender}</Span>
-                </ListItemGroup>
-                <ListItemGroup>
-                    <Term>Born</Term>
-                    <Span>{born}</Span>
-                </ListItemGroup>
-                <ListItemGroup>
-                    <Term>Died</Term>
-                    <Span>{died}</Span>
-                </ListItemGroup>
-                <ListItemGroup>
-                    <Term>Culture</Term>
-                    <Span>{culture}</Span>
-                </ListItemGroup>
+                {
+                  React.Children.map(this.props.children, (child) => {
+                    return React.cloneElement(child, {item})
+                  })
+                }
             </Ul>
-        </CharDetailsBlock>
+        </ItemDetailsBlock>
     );
   }
 }
 
-const CharDetailsBlock = styled.div`
+const ItemDetailsBlock = styled.div`
   background-color: #fff;
   padding: 25px 25px 15px 25px;
   margin-bottom: 40px;
