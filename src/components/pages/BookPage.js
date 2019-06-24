@@ -9,7 +9,7 @@ import RowBlock from '../rowBlock';
 export default class BookPage extends Component {
 
   state = {
-    selectedItem: 3,
+    selectedItem: null,
     error: false
   }
 
@@ -36,7 +36,8 @@ export default class BookPage extends Component {
     const bookDetails = (
       <ItemDetails
         getData={this.gotService.getBook}
-        itemId={this.state.selectedItem}>
+        itemId={this.state.selectedItem}
+        message='Выберите, пожалуйста, книгу из списка'>
           <Field field='numberOfPages' label='Number of pages' />
           <Field field='publiser' label='Publiser' />
           <Field field='released' label='Released' />

@@ -44,6 +44,7 @@ export default class ItemDetails extends Component {
 
   updateItem() {
     const {getData, itemId} = this.props;
+    if (!itemId) return;
     getData(itemId)
       .then((item) => this.setState({
         item,
@@ -55,7 +56,7 @@ export default class ItemDetails extends Component {
 
     if (!this.state.item) {
       return (
-        <ItemDetailsBlock>Please select a item</ItemDetailsBlock>
+        <ItemDetailsBlock>{this.props.message}</ItemDetailsBlock>
       )
     }
 

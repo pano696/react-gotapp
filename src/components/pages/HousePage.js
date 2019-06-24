@@ -9,7 +9,7 @@ import RowBlock from '../rowBlock';
 export default class HousePage extends Component {
 
   state = {
-    selectedItem: 3,
+    selectedItem: null,
     error: false
   }
 
@@ -36,7 +36,8 @@ export default class HousePage extends Component {
     const HouseDetails = (
       <ItemDetails
         getData={this.gotService.getHouse}
-        itemId={this.state.selectedItem}>
+        itemId={this.state.selectedItem}
+        message='Выберите, пожалуйста, дом из списка'>
           <Field field='region' label='Region' />
           <Field field='words' label='Words' />
           <Field field='titles' label='Titles' />
