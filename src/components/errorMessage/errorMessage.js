@@ -1,13 +1,22 @@
 import React from 'react';
-import './errorMessage.css'
+import styled from 'styled-components';
+import img from './error.jpg';
+// import './errorMessage.css'
 
 const ErrorMessage = () => {
   return (
     <>
-      <img src={process.env.PUBLIC_URL + '/img/error.jpg'} alt='error'/>
-      <span>Somtheng goes wrong.</span>
+      <Img src={img} alt='error'/>
+      <ErrorSpan>Somtheng goes wrong.</ErrorSpan>
     </>
   )
 }
 
 export default ErrorMessage;
+
+const Img = styled.img`
+  width: 100%;
+`;
+const ErrorSpan = styled.span`
+  color: #ffffff;
+`;

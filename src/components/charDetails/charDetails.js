@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import GotService from '../../services/GotService';
+import Spiner from '../spiner';
+import ErrorMessage from '../errorMessage';
 // import './charDetails.css';
 export default class CharDetails extends Component {
 
   state = {
-    char: null
+    char: null,
+    loading: false,
+    error: false
   }
 
   gotService = new GotService();
@@ -16,27 +20,51 @@ export default class CharDetails extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.charId !== prevProps.charId) {
+      this.setState({loading: true});
       this.updateChar();
     }
   }
 
+  componentDidCatch() {
+    this.setState({error: true})
+  }
+
   updateChar() {
     const {charId} = this.props;
-    console.log(charId);
-
     if (!charId) {return;}
-
     this.gotService.getCharacter(charId)
-        .then((char) => this.setState({char}));
+        .then((char) => {
+          this.setState({
+            char,
+            loading: false
+          })
+        });
+    // this.foo.bar = 0;
   }
 
   render() {
 
     if (!this.state.char) {
-      return <span className="select-error">Please select a character</span>
+      return (
+        <CharDetailsBlock>Please select a character</CharDetailsBlock>
+      )
     }
 
-    const {name, gender, born, died, culture} = this.state.char;
+    const {char: {name, gender, born, died, culture}, loading, error} = this.state;
+
+    if (loading) {
+      return  (
+        <CharDetailsBlock>
+          <Spiner />
+        </CharDetailsBlock>
+      )
+    }
+
+    if (error) {
+      return <ErrorMessage />
+    }
+
+
 
     return (
         <CharDetailsBlock>

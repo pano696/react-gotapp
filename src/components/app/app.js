@@ -1,68 +1,50 @@
-import React, {useState} from 'react';
+import React, {Component} from 'react';
 import {Col, Row, Container} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
-import ItemList from '../itemList';
-import CharDetails from '../charDetails';
-import GotService from '../../services/GotService';
+import CharacterPage from '../characterPage'
 import styled from 'styled-components';
+import ErrorMessage from '../errorMessage';
 
 
-const App = () => {
+export default class App extends Component {
 
-  const [showRandomChar, toggleRandomChar] = useState(true);
-  const [selectedChar, toggleSelectedChar] = useState(null);
-
-
-  const got = new GotService();
-
-  got.getAllCharacters()
-      .then(res => console.log('All characters:', res));
-  got.getCharacter(125)
-    .then(res => console.log('Character 125:', res));
-  got.getAllBooks()
-    .then(res => console.log('All books:', res));
-  got.getBook(4)
-    .then(res => console.log('Book 4:', res));
-  got.getAllHouses()
-    .then(res => console.log('All houses:', res));
-  got.getHouse(6)
-    .then(res => console.log('Hous 6:', res));
-
-  const toggleRandom = () => {
-    toggleRandomChar(!showRandomChar)
+  state = {
+    showRandomChar: true,
+    error: false
   }
 
-  const onCharSelected = (id) => {
-    toggleSelectedChar(id)
+  componentDidCatch() {
+    this.setState({error: true})
   }
+
+  toggleRandom = () => {
+    this.setState({showRandomChar: !this.state.showRandomChar})
+  }
+
+  render() {
+
+    if (this.state.error) { return <ErrorMessage />}
 
     return (
-        <>
-            <Container>
-                <Header />
-            </Container>
-            <Container>
-                <Row>
-                    <Col lg={{size: 5, offset: 0}}>
-                        <Btn onClick={toggleRandom}>{showRandomChar ? 'Скрыть случайного героя' : 'Показать случайного героя'}</Btn>
-                        {showRandomChar ? <RandomChar/> : null}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md='6'>
-                        <ItemList onCharSelected={onCharSelected}/>
-                    </Col>
-                    <Col md='6'>
-                        <CharDetails charId={selectedChar}/>
-                    </Col>
-                </Row>
-            </Container>
-        </>
+      <>
+          <Container>
+              <Header />
+          </Container>
+          <Container>
+              <Row>
+                  <Col lg={{size: 5, offset: 0}}>
+                      <Btn onClick={this.toggleRandom}>{this.state.showRandomChar ? 'Скрыть случайного героя' : 'Показать случайного героя'}</Btn>
+                      {this.state.showRandomChar ? <RandomChar/> : null}
+                  </Col>
+              </Row>
+              <CharacterPage />
+          </Container>
+      </>
     );
+  }
 };
 
-export default App;
 
 const Btn = styled.button`
   margin: 1rem auto;
