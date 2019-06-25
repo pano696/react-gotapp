@@ -28,7 +28,8 @@ export default class CharacterPage extends Component {
     if (this.state.error) { return <ErrorMessage />}
 
     const itemList = (
-      <ItemList onItemSelected={this.onItemSelected}
+      <ItemList
+        onItemSelected={this.onItemSelected}
         getData={this.gotService.getAllCharacters}
         renderItem={({name, gender}) => `${name} (${gender})`}/>
     )

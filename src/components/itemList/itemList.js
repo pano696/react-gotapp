@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import Spiner from '../spiner';
 import ErrorMessage from '../errorMessage';
+// import PropTypes from 'prop-type';
 // import './itemList.css';
 export default class ItemList extends Component {
 
@@ -9,6 +10,7 @@ export default class ItemList extends Component {
     itemList: null,
     error: false
   }
+
 
   componentDidMount() {
     const {getData} = this.props;
@@ -54,6 +56,7 @@ export default class ItemList extends Component {
     );
   }
 }
+
 
 const ListGroupItem = styled.li`
   position: relative;

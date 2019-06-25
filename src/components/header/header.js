@@ -1,5 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
+import {Link} from 'react-router-dom';
+
+const Header = () => {
+    return (
+        <HeaderBlock>
+            <HeaderTitle>
+                <Link to="/">Game of Thrones DB</Link>
+            </HeaderTitle>
+            <HeaderLinks>
+                <Li>
+                    <Link to="/characters/" >Characters</Link>
+                </Li>
+                <Li>
+                    <Link to="/houses/">Houses</Link>
+                </Li>
+                <Li>
+                    <Link to="/books/">Books</Link>
+                </Li>
+            </HeaderLinks>
+        </HeaderBlock>
+    );
+};
+
+export default Header;
+
 
 const HeaderBlock = styled.div`
     display: flex;
@@ -26,30 +51,3 @@ const HeaderLinks = styled.ul`
     }
 `;
 const Li = styled.li``;
-const A = styled.a``;
-
-
-const Header = () => {
-    return (
-        <HeaderBlock>
-            <HeaderTitle>
-                <A href="#">
-                Game of Thrones DB
-                </A>
-            </HeaderTitle>
-            <HeaderLinks>
-                <Li>
-                    <A href="#">Characters</A>
-                </Li>
-                <Li>
-                    <A href="#">Houses</A>
-                </Li>
-                <Li>
-                    <A href="#">Books</A>
-                </Li>
-            </HeaderLinks>
-        </HeaderBlock>
-    );
-};
-
-export default Header;

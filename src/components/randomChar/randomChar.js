@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import GotSevices from '../../services/GotService';
 import Spiner from '../spiner'
 import ErrorMessage from '../errorMessage';
+// import PropTypes from 'prop-type';
 // import './randomChar.css';
 
 export default class RandomChar extends Component {
 
   componentDidMount() {
     this.updateCharacter();
-    this.timerID = setInterval(this.updateCharacter, 1500);
+    this.timerID = setInterval(this.updateCharacter, this.props.interval);
   }
 
   componentWillUnmount() {
@@ -83,6 +84,10 @@ const View = ({char}) => {
       </Ul>
     </>
   )
+}
+
+RandomChar.defaultProps = {
+  interval: 1500
 }
 
 const RandomBlock = styled.div`

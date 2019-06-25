@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import {Col, Row, Container} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
-import {CharacterPage, BookPage, HousePage} from '../pages'
+import {Start, CharacterPage, HousePage, BookPage, BookItem} from '../pages'
 import styled from 'styled-components';
 import ErrorMessage from '../errorMessage';
+import {BrowserRouter as Router,  Route} from 'react-router-dom';
 
 
 export default class App extends Component {
@@ -27,7 +28,8 @@ export default class App extends Component {
     if (this.state.error) { return <ErrorMessage />}
 
     return (
-      <>
+      <Router>
+        <div className="app">
           <Container>
               <Header />
           </Container>
@@ -35,14 +37,21 @@ export default class App extends Component {
               <Row>
                   <Col lg={{size: 5, offset: 0}}>
                       <Btn onClick={this.toggleRandom}>{this.state.showRandomChar ? 'Скрыть случайного героя' : 'Показать случайного героя'}</Btn>
-                      {this.state.showRandomChar ? <RandomChar/> : null}
+                      {this.state.showRandomChar ? <RandomChar interval='5000'/> : null}
                   </Col>
               </Row>
-              <CharacterPage />
-              <BookPage />
-              <HousePage />
+              <Route path='/' exact component={Start} />
+              <Route path='/characters' exact component={CharacterPage} />
+              <Route path='/houses' exact component={HousePage} />
+              <Route path='/books' exact component={BookPage} />
+              <Route path='/books/:id' render={
+                ({match, location, history}) => {
+                  return <BookItem bookId={match.params.id}/>
+                }
+              }/>
           </Container>
-      </>
+        </div>
+      </Router>
     );
   }
 };
