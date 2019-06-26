@@ -2,25 +2,10 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import Spiner from '../spiner';
 import ErrorMessage from '../errorMessage';
+import GotService from '../../services/GotService';
 // import PropTypes from 'prop-type';
 // import './itemList.css';
-export default class ItemList extends Component {
-
-  state = {
-    itemList: null,
-    error: false
-  }
-
-
-  componentDidMount() {
-    const {getData} = this.props;
-    getData()
-      .then((itemList) => this.setState({itemList}))
-  }
-
-  componentDidCatch() {
-    this.setState({error: true})
-  }
+class ItemList extends Component {
 
   renderItems(arr) {
     return arr.map((item) => {
@@ -37,17 +22,8 @@ export default class ItemList extends Component {
   }
 
   render() {
-
-    const {itemList, error} = this.state;
-
-    if (!itemList) {
-      return <Spiner />
-    }
-    if (error) {
-      return <ErrorMessage />
-    }
-
-    const items = this.renderItems(itemList);
+    const {data} = this.props;
+    const items = this.renderItems(data);
 
     return (
       <ListGroup>
@@ -57,6 +33,43 @@ export default class ItemList extends Component {
   }
 }
 
+
+const withData = (View, getData) => {
+  return class extends Component {
+
+    state = {
+      data: null,
+      error: false
+    }
+
+
+    componentDidMount() {
+      getData()
+        .then((data) => this.setState({data}))
+    }
+
+    componentDidCatch() {
+      this.setState({error: true})
+    }
+
+    render() {
+
+      const {data, error} = this.state;
+
+      if (!data) {
+        return <Spiner />
+      }
+      if (error) {
+        return <ErrorMessage />
+      }
+
+      return <View  {...this.props} data={data}/>
+    }
+  }
+}
+
+const {getAllCharacters} = new GotService();
+export default withData(ItemList, getAllCharacters);
 
 const ListGroupItem = styled.li`
   position: relative;

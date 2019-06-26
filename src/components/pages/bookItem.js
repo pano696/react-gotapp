@@ -5,7 +5,7 @@ import GotService from '../../services/GotService';
 
 export default class BookItem extends Component {
 
-  gotService = new GotService;
+  gotService = new GotService();
 
   render() {
     return(
