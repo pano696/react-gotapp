@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.2.1",
-    "http-server": "^0.11.1",
+    "http-server": "^0.11.2",
     "node-sass": "^4.11.0",
     "prop-type": "0.0.1",
     "react": "^16.7.0",
